@@ -10,6 +10,7 @@ let screen = document.querySelector('canvas');
 let context = screen.getContext("2d");
 let player = {x:10,y:10};
 let ball = {x:10,y:10};
+let target = {x:676,y:Math.floor(Math.random() * 300)};
 
 
 
@@ -66,19 +67,47 @@ function keyupHandler(event){
 function edgeScreen(){
     if(player.x < 0 ){
         player.x = 0;
+        ball.x = 0;
     }
     if(player.x  > 650){
         player.x = 650;
+        ball.x = 650;
     }
      if(player.y < 0 ){
         player.y = 0;
+        ball.y = 0;
      }
      if(player.y  > 351){
         player.y = 351;
+        ball.y = 351;
         
      }
 
 }
+
+  function colision(){
+      
+     if(ball.x == target.x && ball.y == target.y ){
+         alert('BOOOOMMMMMMM');
+        target = {x:676,y:Math.floor(Math.random() * 300)};
+        alert('Reloading');
+        reloadGUN();
+     }
+     for(var i = 1; i< 20 ; i++){
+        if(ball.x == target.x && (ball.y + i )== target.y  ){
+            alert('BOOOOMMMMMMM');
+            target = {x:676,y:Math.floor(Math.random() * 300)};
+            alert('Reloading');
+            reloadGUN();
+        }
+        if(ball.x == target.x && (ball.y - i )== target.y  ){
+            alert('BOOOOMMMMMMM');
+            target = {x:676,y:Math.floor(Math.random() * 300)};
+            alert('Reloading');
+            reloadGUN();
+        }   
+    }  
+ }
 
 //function to move player
 function movePlayer(){
@@ -104,28 +133,41 @@ function movePlayer(){
 function moveBall(){
 
     if(reload){
-        ball.x = player.x;
-        ball.y = player.y;
-        reload = false;
-        console.log('Reload is:',reload);
-    }if(shoot){
+        reloadGUN();
+    }
+    if(shoot){
         for(var i = 0; i <=screen.width ; i ++){
             if(ball.x < 650){
             ball.x += i; 
             }
         }
+        colision();
         shoot = false;
     }  
+}
+
+function reloadGUN(){
+    ball.x = player.x;
+    ball.y = player.y;
+    reload = false;
 }
 
 
 //clean the screen and after fill the screen with new position
 function render(){
     context.clearRect(0,0,screen.width,screen.height);
+    context.fillStyle = 'green';
+    context.fillRect(target.x,target.y , 20,20);
     context.fillStyle = 'black';
     context.fillRect(player.x,player.y,50,50);
     context.fillStyle = 'red';
     context.fillRect(ball.x,ball.y , 20,20);
+    context.fillStyle = 'red';
+    context.fillRect(ball.x,ball.y , 20,20);
+    console.log('ty is '+ target.y);
+    console.log('by is '+ ball.y);
+    console.log('ballX is '+ ball.x + 'and ball y is '+ ball.y);
+    
 }
 
 //update screen
